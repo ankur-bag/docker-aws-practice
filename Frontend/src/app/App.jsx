@@ -9,13 +9,16 @@ import {SocketIOProvider} from "y-socket.io"
 const App = () => {
 
   const editorRef = useRef (null)
+   /* in ydoc all the files in the frontend is stored */ 
   const ydoc = useMemo(() => new Y.Doc(), [])
+  /* and though ydoc , yjs compares the snapshots of the text in ydoc  and the present updated ydoc and takes out the delta and then that delta goes to the server , and then server broadcasts the same delta to all the connected clients */ 
   const yText = useMemo(() => ydoc.getText("monaco"), [ydoc])
 
   const handleMount = (editor) =>{
       editorRef.current = editor 
-
+      /*SocketIOProvider sets the connections between the user and the server*/ 
       const provider = new SocketIOProvider("http://localhost:3000", "monaco", ydoc, { autoConnect: true })
+      /*MonacoBinding sets the monaco editor to sync with the ydoc*/ 
       const monacoBinding = new MonacoBinding (
 
         yText,
